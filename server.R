@@ -2,42 +2,22 @@ library(shiny)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(dygraphs)
+library(datasets)
 
 function(input, output, session) {
 
   observe({
-    dest <- unique(flights %>%
-                     filter(flights$origin == input$origin) %>%
-                     .$dest)
+    selected_languages <- input$languages
+    print("outer input$select_all", input$select_all)
 
-    updateSelectizeInput(
+    visible_languages <- all_languages[grep(input$filter_languages, tolower(all_languages))]
+
+    updateCheckboxGroupInput(
       session,
-      "dest",
-      choices = dest,
-      selected = dest[1])
+      "languages",
+      choices = visible_languages,
+      selected = selected_languages)
   })
 
-  flights_delay <- reactive({
-    flights %>%
-      filter(origin == input$origin & dest == input$dest) %>%
-      group_by(carrier) %>%
-      summarise(n = n(),
-                departure = mean(dep_delay),
-                arrival = mean(arr_delay))
-  })
-
-  output$delay <- renderPlot(
-    flights_delay() %>%
-      gather(key = type, value = delay, departure, arrival) %>%
-      ggplot(aes(x = carrier, y = delay, fill = type)) +
-      geom_col(position = "dodge") +
-      ggtitle("Average delay")
-  )
-
-  output$count <- renderPlot(
-    flights_delay() %>%
-      ggplot(aes(x = carrier, y = n)) +
-      geom_col(fill = "lightblue") +
-      ggtitle("Number of flights")
-  )
 }

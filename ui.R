@@ -1,20 +1,24 @@
 library(shiny)
+library(dygraphs)
+
+
 
 fluidPage(
-  titlePanel("NYC Flights 2014"),
+  titlePanel("Github languages"),
   sidebarLayout(
     sidebarPanel(
-      selectizeInput(inputId = "origin",
-                     label = "Departure airport",
-                     choices = unique(flights[, 'origin'])),
-      selectizeInput(inputId = "dest",
-                     label = "Arrival airport",
-                     choices = unique(flights[, 'dest']))
+
+      textInput("filter_languages", "", placeholder="Filter"),
+
+      checkboxGroupInput(inputId = "languages",
+                     label = "Languages",
+                     choices = all_languages
+                   )
+
     ),
     mainPanel(
       fluidRow(
-        column(6, plotOutput("count")),
-        column(6, plotOutput("delay"))
+        dygraphOutput("dygraph")
       )
     )
   )
