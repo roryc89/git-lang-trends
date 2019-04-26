@@ -15,3 +15,22 @@ top_languages = aggs[order(-aggs$x), ] %>%
 all_languages = unique(repos$language) %>%
   as.character %>%
   sort
+all_languages
+top_4_languages = aggs[order(-aggs$x), ] %>%
+  head(., n=4) %>%
+  .$language %>%
+  as.character
+
+
+top_4_lang_repos = filter(repos, language %in% top_4_languages)
+
+library("ggplotgui")
+
+# You can call the function with and without passing a dataset
+
+all_langs_stats = group_by(repos, created_at) %>%
+  select(., -language) %>%
+  summarise_all(funs(sum))
+
+
+write.csv(top_4_lang_repos,file="top4.csv",row.names=TRUE,col.names=TRUE)

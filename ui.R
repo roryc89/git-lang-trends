@@ -2,7 +2,6 @@ library(shiny)
 library(dygraphs)
 
 
-
 fluidPage(
   titlePanel("Github languages"),
   sidebarLayout(
