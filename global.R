@@ -21,7 +21,6 @@ repos = inner_join(repos, day_sums, by = "created_at") %>%
   )
 
 repos = repos[order(repos$language), ]
-paste0('asdf', 'xc')
 
 repos_by_month = repos %>%
   group_by(year, month, language) %>%

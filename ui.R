@@ -12,7 +12,7 @@ dashboardPage(
       dateRangeInput(
         'date_range',
         label = 'Choose a date range',
-        start = Sys.Date() - 365, end = Sys.Date()
+        start = Sys.Date() - (365 * 10), end = Sys.Date()
       ),
 
       textInput("filter_languages", "", placeholder="Filter"),
@@ -28,7 +28,7 @@ dashboardPage(
     tabItems(
       tabItem(tabName = "dashboard",
         fluidRow(
-          box(plotOutput("plot1", height = 250))
+          box(plotOutput("plot1", height = 560))
 
           # box(
           #   title = "Controls",
