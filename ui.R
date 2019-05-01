@@ -8,10 +8,13 @@ dashboardPage(
     sidebarMenu(
       menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
       menuItem("Widgets", tabName = "widgets", icon = icon("th")),
-      sidebarSearchForm("filter_languages", buttonId = "searchButton",
-                  label = "Search..."),
 
-      # textInput("filter_languages", "", placeholder="Filter languages"),
+      dateRangeInput('date_range',
+        label = 'Choose a date range',
+        start = Sys.Date() - 365, end = Sys.Date()
+      ),
+
+      textInput("filter_languages", "", placeholder="Filter"),
 
       checkboxGroupInput(inputId = "languages",
                      label = "Languages",
@@ -21,7 +24,6 @@ dashboardPage(
   ),
   dashboardBody(
     tabItems(
-      # First tab content
       tabItem(tabName = "dashboard",
         fluidRow(
           box(plotOutput("plot1", height = 250)),
@@ -38,26 +40,3 @@ dashboardPage(
     )
   )
 )
-# library(dygraphs)
-#
-#
-# fluidPage(
-#   titlePanel("Github languages"),
-#   sidebarLayout(
-#     sidebarPanel(
-#
-#       textInput("filter_languages", "", placeholder="Filter"),
-#
-#       checkboxGroupInput(inputId = "languages",
-#                      label = "Languages",
-#                      choices = all_languages
-#                    )
-#
-#     ),
-#     mainPanel(
-#       fluidRow(
-#         dygraphOutput("dygraph")
-#       )
-#     )
-#   )
-# )
