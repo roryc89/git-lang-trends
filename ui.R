@@ -1,16 +1,24 @@
 # library(shiny)
 library(shinydashboard)
 
+
 dashboardPage(
-  dashboardHeader(),
-  ## Sidebar content
+  dashboardHeader(title = "Github languages"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-      menuItem("Widgets", tabName = "widgets", icon = icon("th"))
+      menuItem("Widgets", tabName = "widgets", icon = icon("th")),
+      sidebarSearchForm("filter_languages", buttonId = "searchButton",
+                  label = "Search..."),
+
+      # textInput("filter_languages", "", placeholder="Filter languages"),
+
+      checkboxGroupInput(inputId = "languages",
+                     label = "Languages",
+                     choices = all_languages,
+                   )
     )
   ),
-  ## Body content
   dashboardBody(
     tabItems(
       # First tab content
@@ -24,14 +32,11 @@ dashboardPage(
           )
         )
       ),
-
-      # Second tab content
       tabItem(tabName = "widgets",
         h2("Widgets tab content")
       )
     )
   )
-
 )
 # library(dygraphs)
 #
