@@ -12,7 +12,7 @@ dashboardPage(
       dateRangeInput(
         'date_range',
         label = 'Choose a date range',
-        start = Sys.Date() - (365 * 2), end = Sys.Date()
+        start = Sys.Date() - (365 * 8), end = Sys.Date()
       ),
 
       textInput("filter_languages", "", placeholder="Filter"),
@@ -21,6 +21,7 @@ dashboardPage(
         inputId = "languages",
         label = "Languages",
         choices = all_languages,
+        selected = c("Python", "C", "Java")
       )
     )
   ),

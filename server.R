@@ -30,7 +30,7 @@ function(input, output, session) {
 
     ggplot(filtered_commits) +
       geom_line(aes(x = date, y = n, color = lang), size = 0.2) +
-        geom_smooth(aes(x = date, y = n, color = lang), size = 2, method="auto", se=TRUE, fullrange=TRUE, level=0.95) +
+        geom_smooth(aes(x = date, y = n, color = lang), size = 1, method="auto", se=TRUE, fullrange=TRUE, level=0.95) +
         expand_limits(y = 0)
   })
 
