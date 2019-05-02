@@ -6,7 +6,7 @@ library(lubridate)
 
 function(input, output, session) {
 
-  selected_languages <- observe({
+  observe({
     selected_languages <- input$languages
 
     visible_languages <- all_languages[grep(input$filter_languages, tolower(all_languages))]
@@ -23,12 +23,15 @@ function(input, output, session) {
     date_start = ymd(input$date_range[[1]])
     date_end = ymd(input$date_range[[2]])
 
-    repos_in_range = repos_by_month %>%
-      filter(created_at >= date_start & created_at <= date_end) %>%
-      filter(language %in% input$languages)
 
-    ggplot(repos_in_range) +
-      geom_line(aes(x = created_at, y = count, color = language), size = 1)
+    filtered_commits = commits_by_date %>%
+      filter(date >= date_start & date <= date_end) %>%
+      filter(lang %in% input$languages)
+
+    ggplot(filtered_commits) +
+      geom_line(aes(x = date, y = n, color = lang), size = 0.2) +
+        geom_smooth(aes(x = date, y = n, color = lang), size = 2, method="auto", se=TRUE, fullrange=TRUE, level=0.95) +
+        expand_limits(y = 0)
   })
 
 }
