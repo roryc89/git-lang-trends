@@ -28,7 +28,7 @@ dashboardPage(
     tabItems(
       tabItem(tabName = "dashboard",
         fluidRow(
-          box(plotOutput("plot1", height = 560))
+          box(plotOutput("lang_count_plot", height = 560))
 
           # box(
           #   title = "Controls",

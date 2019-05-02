@@ -19,11 +19,9 @@ function(input, output, session) {
     )
   })
 
-
-  output$plot1 <- renderPlot({
+  output$lang_count_plot <- renderPlot({
     date_start = ymd(input$date_range[[1]])
     date_end = ymd(input$date_range[[2]])
-
 
     repos_in_range = repos_by_month %>%
       filter(created_at >= date_start & created_at <= date_end) %>%

@@ -28,7 +28,8 @@ repos_by_month = repos %>%
     # language = language,
     # year = year,
     # month = month,
-    created_at = ymd(paste0(first(year), "-", first(month), "-01")),
+    created_at = ymd(paste0(first(year), "-",
+    first(month), "-01")),
     count = sum(count),
     fork_day_ratio = mean(fork_day_ratio),
     watchers_day_ratio = mean(watchers_day_ratio)
@@ -41,17 +42,25 @@ top_languages = aggs[order(-aggs$x), ] %>%
   head(., n=25) %>%
   .$language %>%
   as.character
-
+top_languages
 all_languages = unique(repos$language) %>%
   as.character %>%
   sort
 
+11195572
+16896079
+37754749
+
+3349035
+230171941
+14295617
+
+1498129
 
 top_4_languages = aggs[order(-aggs$x), ] %>%
-  head(., n=4) %>%
+  head(., n=) %>%
   .$language %>%
   as.character
-
 
 top_4_lang_repos = filter(repos, language %in% top_4_languages)
 
@@ -61,4 +70,5 @@ all_langs_stats = group_by(repos, created_at) %>%
   summarise_all(funs(sum))
 
 
-write.csv(top_4_lang_repos,file="top4.csv",row.names=TRUE,col.names=TRUE)
+write.csv(top_4_lang_repos,file="top4.csv",r
+  ow.names=TRUE,col.names=TRUE)
