@@ -6,16 +6,13 @@ library(lubridate)
 
 function(input, output, session) {
 
-  observe({
-    selected_languages <- input$languages
-
+  observeEvent(input$filter_languages, {
     visible_languages <- all_languages[grep(input$filter_languages, tolower(all_languages))]
 
     updateCheckboxGroupInput(
       session,
       "languages",
-      choices = visible_languages,
-      selected = selected_languages
+      choices = visible_languages
     )
   })
 
@@ -56,7 +53,7 @@ function(input, output, session) {
     p = ggplot(filtered_commits) +
         expand_limits(y = 0) +
         ylab("Daily commits") +
-        ggtitle("Number of commits each day") 
+        ggtitle("Number of commits each day")
 
 
     if("all_points" %in% input$line_types){

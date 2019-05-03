@@ -15,3 +15,21 @@ commits_by_date = read_csv("./data/daily_lang_commit_counts.csv") %>%
   ungroup
 
 all_languages = unique(commits_by_date$lang) %>% sort
+
+top_25_languages = commits_by_date %>%
+  group_by(lang) %>%
+  summarise(commit_count = sum(n)) %>%
+  arrange(desc(commit_count)) %>%
+  filter(!is.na(lang)) %>%
+  .$lang %>%
+  head(25)
+
+top_10_languages = head(top_25_languages, 10)
+
+data_science_languages = c(
+  "Python", "R", "Java", "SQL", "Julia", "Scala", "Matlab"
+)
+
+functional_languages = c(
+  "Clojure", "OCaml", "Haskell", "Julia", "Scala", "Elixir", "Idris", "Elm", "PureScript"
+)
