@@ -7,12 +7,13 @@ library(lubridate)
 function(input, output, session) {
 
   observeEvent(input$filter_languages, {
-    visible_languages <- all_languages[grep(input$filter_languages, tolower(all_languages))]
+    searched_languages <- all_languages[grep(input$filter_languages, tolower(all_languages))]
 
     updateCheckboxGroupInput(
       session,
       "languages",
-      choices = visible_languages
+      choices = unique(c(searched_languages, all_languages)),
+      selected = input$languages
     )
   })
 
