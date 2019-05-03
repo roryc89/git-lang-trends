@@ -12,7 +12,7 @@ dashboardPage(
       dateRangeInput(
         'date_range',
         label = 'Choose a date range',
-        start = Sys.Date() - (365 * 5), end = Sys.Date() - 60
+        start = Sys.Date() - (365 * 3), end = Sys.Date()
       ),
 
       checkboxGroupInput(
@@ -23,8 +23,8 @@ dashboardPage(
         select = c("smoothed")
       ),
 
-      actionButton("top_10", "top 10 languages"),
-      actionButton("top_25", "top 25 languages"),
+      actionButton("top_5", "top 5 languages"),
+      actionButton("top_20", "top 20 languages"),
       actionButton("data_science", "data science languages"),
       actionButton("functional", "functional languages"),
 
@@ -34,7 +34,7 @@ dashboardPage(
         inputId = "languages",
         label = "Languages",
         choices = all_languages,
-        selected = c("Clojure", "Coq", "Haskell", "Julia", "Elixir")
+        selected = top_5_languages
       )
     )
   ),
@@ -42,8 +42,8 @@ dashboardPage(
     tabItems(
       tabItem(tabName = "languages",
         fluidRow(
-          box(plotOutput("lang_ratio_plot", height = 560)),
-          box(plotOutput("lang_count_plot", height = 560))
+          box(plotlyOutput("lang_ratio_plot", height = 560)),
+          box(plotlyOutput("lang_count_plot", height = 560))
         )
       ),
       tabItem(tabName = "widgets",

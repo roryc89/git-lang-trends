@@ -3,6 +3,15 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(lubridate)
+library(plotly)
+
+data_science_languages = c(
+  "Python", "R", "Java", "SQL", "Julia", "Scala", "Matlab", "SAS"
+)
+
+functional_languages = c(
+  "Clojure", "OCaml", "Haskell", "Scala", "Elixir", "Idris", "Elm", "PureScript"
+)
 
 function(input, output, session) {
 
@@ -17,7 +26,44 @@ function(input, output, session) {
     )
   })
 
-  output$lang_ratio_plot <- renderPlot({
+  observeEvent(input$top_5, {
+    updateCheckboxGroupInput(
+      session,
+      "languages",
+      choices = all_languages,
+      selected = top_5_languages
+    )
+  })
+
+
+  observeEvent(input$top_20, {
+    updateCheckboxGroupInput(
+      session,
+      "languages",
+      choices = all_languages,
+      selected = top_20_languages
+    )
+  })
+
+  observeEvent(input$data_science, {
+    updateCheckboxGroupInput(
+      session,
+      "languages",
+      choices = all_languages,
+      selected = data_science_languages
+    )
+  })
+
+  observeEvent(input$functional, {
+    updateCheckboxGroupInput(
+      session,
+      "languages",
+      choices = all_languages,
+      selected = functional_languages
+    )
+  })
+
+  output$lang_ratio_plot <- renderPlotly({
     date_start = ymd(input$date_range[[1]])
     date_end = ymd(input$date_range[[2]])
 
@@ -39,10 +85,9 @@ function(input, output, session) {
     if("smoothed" %in% input$line_types){
       p = p + geom_smooth(aes(x = date, y = freq, color = lang), size = 1, method="auto", se=TRUE, fullrange=TRUE, level=0.95)
     }
-    p
   })
 
-  output$lang_count_plot <- renderPlot({
+  output$lang_count_plot <- renderPlotly({
     date_start = ymd(input$date_range[[1]])
     date_end = ymd(input$date_range[[2]])
 
