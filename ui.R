@@ -28,7 +28,7 @@ dashboardPage(
       actionButton("data_science", "data science languages"),
       actionButton("functional", "functional languages"),
 
-      textInput("filter_languages", "", placeholder="Search"),
+      textInput("filter_languages", "", placeholder="Search languages"),
 
       checkboxGroupInput(
         inputId = "languages",

@@ -6,7 +6,7 @@ library(lubridate)
 library(plotly)
 
 data_science_languages = c(
-  "Python", "R", "Java", "SQL", "Julia", "Scala", "Matlab", "SAS"
+  "Python", "R", "SQL", "Julia", "Scala", "Matlab", "SAS"
 )
 
 functional_languages = c(
@@ -34,7 +34,6 @@ function(input, output, session) {
       selected = top_5_languages
     )
   })
-
 
   observeEvent(input$top_20, {
     updateCheckboxGroupInput(
@@ -67,7 +66,6 @@ function(input, output, session) {
     date_start = ymd(input$date_range[[1]])
     date_end = ymd(input$date_range[[2]])
 
-
     filtered_commits = commits_by_date %>%
       filter(date >= date_start & date <= date_end) %>%
       filter(lang %in% input$languages)
@@ -85,6 +83,7 @@ function(input, output, session) {
     if("smoothed" %in% input$line_types){
       p = p + geom_smooth(aes(x = date, y = freq, color = lang), size = 1, method="auto", se=TRUE, fullrange=TRUE, level=0.95)
     }
+    p
   })
 
   output$lang_count_plot <- renderPlotly({
