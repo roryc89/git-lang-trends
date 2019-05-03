@@ -27,3 +27,9 @@ commits_sample = commits[seq(1, nrow(commits), 100), ]
 write_csv(commits_sample, 'data/commits_sample.csv')
 
 unique(commits$repo)
+
+commits_sample = read_csv('data/commits_sample.csv')
+head(commits_sample)
+
+github_repos_and_langs = read_csv('data/github_repos_and_langs.csv')
+head(github_repos_and_langs)

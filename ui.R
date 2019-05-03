@@ -6,13 +6,13 @@ dashboardPage(
   dashboardHeader(title = "Github languages"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Languages", tabName = "languages", icon = icon("language")),
-      menuItem("Widgets", tabName = "widgets", icon = icon("th")),
+      menuItem("Commits by language", tabName = "languages", icon = icon("language")),
+      menuItem("Repo Network", tabName = "repo_network", icon = icon("project-diagram")),
 
       dateRangeInput(
         'date_range',
         label = 'Choose a date range',
-        start = Sys.Date() - (365 * 3), end = Sys.Date()
+        start = Sys.Date() - (365 * 4), end = Sys.Date()
       ),
 
       checkboxGroupInput(
@@ -23,6 +23,7 @@ dashboardPage(
         select = c("smoothed")
       ),
 
+      actionButton("clear_languages", "clear languages"),
       actionButton("top_5", "top 5 languages"),
       actionButton("top_20", "top 20 languages"),
       actionButton("data_science", "data science languages"),
@@ -46,8 +47,9 @@ dashboardPage(
           box(plotlyOutput("lang_count_plot", height = 560))
         )
       ),
-      tabItem(tabName = "widgets",
-        h2("Widgets tab content")
+      tabItem(tabName = "repo_network",
+        h2("Repo nodes"),
+        plotlyOutput("flights_plot", height = 720)
       )
     )
   )

@@ -25,3 +25,17 @@ top_20_languages = commits_by_date %>%
   head(20)
 
 top_5_languages = head(top_20_languages, 5)
+
+commits = read_csv('data/commits_sample.csv')
+
+
+
+# NETWORK GRAPH
+library(nycflights13)
+library(igraph)
+library(intergraph)
+library(sna)
+library(ggplot2)
+library(ggnetwork)
+library(plotly)
+library(htmlwidgets)
