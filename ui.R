@@ -12,7 +12,7 @@ dashboardPage(
       dateRangeInput(
         'date_range',
         label = 'Choose a date range',
-        start = Sys.Date() - (365 * 8), end = Sys.Date()
+        start = Sys.Date() - (365 * 3), end = Sys.Date() - 60
       ),
 
       checkboxGroupInput(
@@ -29,7 +29,7 @@ dashboardPage(
         inputId = "languages",
         label = "Languages",
         choices = all_languages,
-        selected = c("Python", "Java", "JavaScript", "C")
+        selected = c("Python", "Java", "JavaScript", "C", "C++")
       )
     )
   ),
@@ -37,6 +37,7 @@ dashboardPage(
     tabItems(
       tabItem(tabName = "dashboard",
         fluidRow(
+          box(plotOutput("lang_ratio_plot", height = 560)),
           box(plotOutput("lang_count_plot", height = 560))
         )
       ),
