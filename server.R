@@ -28,10 +28,16 @@ function(input, output, session) {
       filter(date >= date_start & date <= date_end) %>%
       filter(lang %in% input$languages)
 
-    ggplot(filtered_commits) +
-      geom_line(aes(x = date, y = n, color = lang), size = 0.2) +
-        geom_smooth(aes(x = date, y = n, color = lang), size = 1, method="auto", se=TRUE, fullrange=TRUE, level=0.95) +
-        expand_limits(y = 0)
+    p = ggplot(filtered_commits) +  expand_limits(y = 0)
+
+    if("all_points" %in% input$line_types){
+      p = p + geom_line(aes(x = date, y = freq, color = lang), size = 0.2)
+    }
+
+    if("smoothed" %in% input$line_types){
+      p = p + geom_smooth(aes(x = date, y = freq, color = lang), size = 1, method="auto", se=TRUE, fullrange=TRUE, level=0.95)
+    }
+    p
   })
 
 }

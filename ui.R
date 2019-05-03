@@ -15,13 +15,21 @@ dashboardPage(
         start = Sys.Date() - (365 * 8), end = Sys.Date()
       ),
 
+      checkboxGroupInput(
+        inputId = "line_types",
+        label = "Line types",
+        choiceNames = c("All points", "Smoothed"),
+        choiceValues = c("all_points", "smoothed"),
+        select = c("smoothed")
+      ),
+
       textInput("filter_languages", "", placeholder="Filter"),
 
       checkboxGroupInput(
         inputId = "languages",
         label = "Languages",
         choices = all_languages,
-        selected = c("Python", "C", "Java")
+        selected = c("Python", "Java", "JavaScript", "C")
       )
     )
   ),
