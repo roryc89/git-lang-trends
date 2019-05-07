@@ -4,6 +4,11 @@ library(tidyr)
 library(ggplot2)
 library(lubridate)
 library(plotly)
+library(network)
+library(sna)
+library(GGally)
+# install.packages("GGally")
+
 
 data_science_languages = c(
   "Python", "R", "SQL", "Julia", "Scala", "Matlab", "SAS"
@@ -14,61 +19,17 @@ functional_languages = c(
 )
 
 
-make_node_graph = function(){
+make_repo_node_graph = function(){
+  net = rgraph(10, mode = "graph", tprob = 0.5)
+  net = network(net, directed = FALSE)
 
-  df_edges <- flights %>% group_by(origin, dest) %>% summarize(weight = n())
-  df_edges %>% arrange(desc(weight)) %>% head()
+  # vertex names
+  network.vertex.names(net) = letters[1:10]
+  # ggnet2(net, palette = c("vowel" = "steelblue", "consonant" = "tomato"))
+  # ggnet2(net, color = ifelse(net %v% "phono" == "vowel", "steelblue", "tomato"))
+  ggnet2(net)
+  # ggnet2(net, palette = "Set2")
 
-
-  colors = c("#9998db", "#e74c3c", "#2ecc71")
-  # seting alphabetical order; allows for predictable ordering later
-  origins = c("EWR", "JFK", "LGA")
-  df_colors = tbl_df(data.frame(origin=origins, color=origins))
-  df_edges <- df_edges %>% left_join(df_colors)
-
-
-  net <- graph.data.frame(df_edges, directed = T)
-
-
-  V(net)$degree <- centralization.degree(net)$res
-  V(net)$weighted_degree <- graph.strength(net)
-  V(net)$color_v <- c(origins, rep("Others", gorder(net) - length(colors)))
-
-
-  df_airports <- data.frame(vname=V(net)$name) %>% left_join(airports, by=c("vname" = "faa"))
-
-
-  V(net)$text <- paste(V(net)$name,
-                         df_airports$name,
-                         paste(format(V(net)$weighted_degree, big.mark=",", trim=T), "Flights"),
-                          sep = "<br>")
-  V(net)$text %>% head()
-
-
-  V(net)$lat <- df_airports$lat
-  V(net)$lon <- df_airports$lon
-
-
-  # gives to/from locations; map to corresponding ending lat/long
-  end_loc <- data.frame(ename=get.edgelist(net)[,2]) %>% left_join(airports, by=c("ename" = "faa"))
-
-
-  set.seed(123)
-  df_net <- ggnetwork(net, layout = "fruchtermanreingold", weights="weight", niter=50000, arrow.gap=0)
-  df_net %>% head()
-
-
-  flights_plot <- ggplot(df_net, aes(x = x, y = y, xend = xend, yend = yend)) +
-      geom_edges(aes(color = color), size=0.4, alpha=0.25) +
-      geom_nodes(aes(color = color_v, size = degree, text=text)) +
-      ggtitle("Network Graph of U.S. Flights Outbound from NYC in 2013") +
-      scale_color_manual(labels=c("EWR", "JFK", "LGA", "Others"),
-                           values=c(colors, "#1a1a1a"), name="Airports") +
-      guides(size=FALSE) +
-      # theme_blank() +
-      theme(plot.title = element_text(family="Source Sans Pro"),
-              legend.title = element_text(family="Source Sans Pro"),
-              legend.text = element_text(family="Source Sans Pro"))
 }
 
 
@@ -180,7 +141,7 @@ function(input, output, session) {
   })
 
   output$flights_plot <- renderPlotly({
-    flights_plot
+    make_repo_node_graph()
   })
 
 }
