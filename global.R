@@ -26,16 +26,30 @@ top_20_languages = commits_by_date %>%
 
 top_5_languages = head(top_20_languages, 5)
 
-commits = read_csv('data/commits_sample.csv')
+commits_with_dates = read_csv('data/commits_sample.csv') %>%
+  mutate(date = as_date(as_datetime(seconds)))
+
+commit_tallies = commits_with_dates %>%
+  head(100) %>%
+  group_by(date, author_name, email, repo) %>%
+  tally %>%
+  spread(repo, n, fill = 0, drop = T)
+
+head(commit_tallies)
+
+head(commit_tallies %>% filter("500tech/mimic" > 1))
+  # %>%
+  # spread(repo, n)
 
 
 
-# NETWORK GRAPH
-library(nycflights13)
-library(igraph)
-library(intergraph)
-library(sna)
-library(ggplot2)
-library(ggnetwork)
-library(plotly)
-library(htmlwidgets)
+
+# # NETWORK GRAPH
+# library(nycflights13)
+# library(igraph)
+# library(intergraph)
+# library(sna)
+# library(ggplot2)
+# library(ggnetwork)
+# library(plotly)
+# library(htmlwidgets)

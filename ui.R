@@ -1,13 +1,14 @@
 # library(shiny)
 library(shinydashboard)
+library(plotly)
 
 
 dashboardPage(
   dashboardHeader(title = "Github languages"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Commits by language", tabName = "languages", icon = icon("language")),
       menuItem("Repo Network", tabName = "repo_network", icon = icon("project-diagram")),
+      menuItem("Commits by language", tabName = "languages", icon = icon("language")),
 
       dateRangeInput(
         'date_range',
@@ -41,15 +42,15 @@ dashboardPage(
   ),
   dashboardBody(
     tabItems(
+      tabItem(tabName = "repo_network",
+        h2("Repo nodes"),
+        plotlyOutput("flights_plot", height = 720)
+      ),
       tabItem(tabName = "languages",
         fluidRow(
           box(plotlyOutput("lang_ratio_plot", height = 560)),
           box(plotlyOutput("lang_count_plot", height = 560))
         )
-      ),
-      tabItem(tabName = "repo_network",
-        h2("Repo nodes"),
-        plotlyOutput("flights_plot", height = 720)
       )
     )
   )

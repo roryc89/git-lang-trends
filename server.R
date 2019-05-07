@@ -7,7 +7,7 @@ library(plotly)
 library(network)
 library(sna)
 library(GGally)
-# install.packages("GGally")
+library(RColorBrewer)
 
 
 data_science_languages = c(
@@ -18,17 +18,52 @@ functional_languages = c(
   "Clojure", "OCaml", "Haskell", "Scala", "Elixir", "Idris", "Elm", "PureScript"
 )
 
+# make_repo_node_graph = function(){
+#   # weighted adjacency matrix
+#   bip = data.frame(event1 = c(1, 2, 1, 0),
+#                    event2 = c(0, 0, 3, 0),
+#                    event3 = c(1, 1, 0, 4),
+#                    row.names = letters[1:4])
+#
+#   # weighted bipartite network
+#   bip = network(bip,
+#                 matrix.type = "bipartite",
+#                 ignore.eval = FALSE,
+#                 names.eval = "weights")
+#
+#   col = c("actor" = "grey", "event" = "gold")
+#
+#   # detect and color the mode
+#   ggnet2(bip, color = "mode", palette = col, label = TRUE, edge.label = "weights")
+# }
 
-make_repo_node_graph = function(){
-  net = rgraph(10, mode = "graph", tprob = 0.5)
-  net = network(net, directed = FALSE)
+make_repo_node_graph = function(date_start, date_end){
 
-  # vertex names
-  network.vertex.names(net) = letters[1:10]
-  # ggnet2(net, palette = c("vowel" = "steelblue", "consonant" = "tomato"))
-  # ggnet2(net, color = ifelse(net %v% "phono" == "vowel", "steelblue", "tomato"))
-  ggnet2(net)
-  # ggnet2(net, palette = "Set2")
+  commit_tallies = commits_with_dates %>%
+    filter(date >= date_start & date <= date_end) %>%
+    head(10) %>%
+    group_by(author_name, email, repo) %>%
+    tally %>%
+    spread(repo, n, fill = 0, drop = T)
+
+
+  # commit_tallies$row.name = commit_tallies$row.name
+
+  # weighted adjacency matrix
+  bip = commit_tallies %>% select(-one_of("date", "author_name",  "email"))
+
+
+  # weighted bipartite network
+  bip = network(bip,
+                matrix.type = "bipartite",
+                ignore.eval = FALSE,
+                names.eval = "weights")
+
+  col = c("actor" = "grey", "event" = "gold")
+
+  # detect and color the mode
+  ggnet2(bip, color = "mode", palette = "Set1", label = FALSE, edge.label = "weights")
+  # ggnet2(net, color = "phono", palette = "Set2")
 
 }
 
@@ -141,7 +176,15 @@ function(input, output, session) {
   })
 
   output$flights_plot <- renderPlotly({
-    make_repo_node_graph()
+    date_start = ymd(input$date_range[[1]])
+    date_end = ymd(input$date_range[[2]])
+
+    #
+    # filtered_commits = commits_by_date %>%
+    #   filter(date >= date_start & date <= date_end) %>%
+    #   filter(lang %in% input$languages)
+
+    make_repo_node_graph(date_start, date_end)
   })
 
 }
