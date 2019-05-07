@@ -13,7 +13,7 @@ dashboardPage(
       dateRangeInput(
         'date_range',
         label = 'Choose a date range',
-        start = Sys.Date() - (365 * 4), end = Sys.Date()
+        start = Sys.Date() - (30 * 1), end = Sys.Date()
       ),
 
       checkboxGroupInput(

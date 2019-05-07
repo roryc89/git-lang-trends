@@ -41,8 +41,22 @@ head(commit_tallies %>% filter("500tech/mimic" > 1))
   # %>%
   # spread(repo, n)
 
+commit_tallies = commits_with_dates %>%
+  head(10) %>%
+  group_by(author_name, email, repo) %>%
+  tally %>%
+  spread(repo, n, fill = 0, drop = T) %>%
+  ungroup
 
+# commit_tallies$row.name = commit_tallies$row.name
 
+# weighted adjacency matrix
+bip = commit_tallies %>% select(-one_of("author_name"))
+
+# rownames(bip) <-  c("Site 1", "Site 2", "Site 3", "Site 4", "Site 5", "6", "7", "8", "9", "10")
+bip = column_to_rownames(bip, var = "email")
+
+print(head(bip))
 
 # # NETWORK GRAPH
 # library(nycflights13)

@@ -18,13 +18,14 @@ functional_languages = c(
   "Clojure", "OCaml", "Haskell", "Scala", "Elixir", "Idris", "Elm", "PureScript"
 )
 
-# make_repo_node_graph = function(){
+# make_repo_node_graph = function(date_start, date_end){
 #   # weighted adjacency matrix
-#   bip = data.frame(event1 = c(1, 2, 1, 0),
-#                    event2 = c(0, 0, 3, 0),
-#                    event3 = c(1, 1, 0, 4),
+#   bip = data.frame(event1 = c(0, 0, 1, 0),
+#                    event2 = c(0, 1, 0, 0),
+#                    event3 = c(1, 0, 0, 0),
 #                    row.names = letters[1:4])
 #
+#   print(bip)
 #   # weighted bipartite network
 #   bip = network(bip,
 #                 matrix.type = "bipartite",
@@ -41,17 +42,18 @@ make_repo_node_graph = function(date_start, date_end){
 
   commit_tallies = commits_with_dates %>%
     filter(date >= date_start & date <= date_end) %>%
-    head(10) %>%
-    group_by(author_name, email, repo) %>%
+    head(100) %>%
+    group_by(author_name, repo) %>%
     tally %>%
-    spread(repo, n, fill = 0, drop = T)
-
-
-  # commit_tallies$row.name = commit_tallies$row.name
+    spread(repo, n, fill = 0, drop = F) %>%
+    ungroup
 
   # weighted adjacency matrix
-  bip = commit_tallies %>% select(-one_of("date", "author_name",  "email"))
+  bip = commit_tallies %>%
+    select(-one_of("author_naoime")) %>%
+    column_to_rownames(var = "author_name")
 
+  print(bip)
 
   # weighted bipartite network
   bip = network(bip,
@@ -62,9 +64,7 @@ make_repo_node_graph = function(date_start, date_end){
   col = c("actor" = "grey", "event" = "gold")
 
   # detect and color the mode
-  ggnet2(bip, color = "mode", palette = "Set1", label = FALSE, edge.label = "weights")
-  # ggnet2(net, color = "phono", palette = "Set2")
-
+  ggnet2(bip, color = "mode", palette = col, label = F, edge.label = "weights")
 }
 
 
@@ -178,11 +178,6 @@ function(input, output, session) {
   output$flights_plot <- renderPlotly({
     date_start = ymd(input$date_range[[1]])
     date_end = ymd(input$date_range[[2]])
-
-    #
-    # filtered_commits = commits_by_date %>%
-    #   filter(date >= date_start & date <= date_end) %>%
-    #   filter(lang %in% input$languages)
 
     make_repo_node_graph(date_start, date_end)
   })
