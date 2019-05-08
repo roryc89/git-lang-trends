@@ -1,4 +1,3 @@
-# library(shiny)
 library(shinydashboard)
 library(plotly)
 
@@ -9,7 +8,7 @@ dashboardPage(
     sidebarMenu(
       menuItem("Commits by language", tabName = "languages", icon = icon("language")),
       menuItem("Repo Network", tabName = "repo_network", icon = icon("project-diagram")),
-      menuItem("About", tabName = "about", icon = icon("about")),
+      menuItem("About", tabName = "about", icon = icon("info")),
 
       dateRangeInput(
         'date_range',
@@ -56,7 +55,7 @@ dashboardPage(
       tabItem(tabName = "about",
         h2("About"),
         h3("Repo"),
-        a(href="https://roryc89.shinyapps.io/git-lang-trends/", "https://roryc89.shinyapps.io/git-lang-trends/"),
+        a(href="https://github.com/roryc89/git-lang-trends.git", "https://github.com/roryc89/git-lang-trends.git"),
         h3("Author"),
         div("Rory Campbell")
       )

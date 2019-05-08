@@ -1,10 +1,6 @@
 library(tidyverse)
 library(lubridate)
-library(zoo)
-library(igraph)
-library(rsconnect)
 
-# rsconnect::deployApp()
 
 commits_by_date = read_csv("./data/daily_lang_commit_counts.csv") %>%
   rename(
@@ -32,6 +28,7 @@ top_5_languages = head(top_20_languages, 5)
 
 repos_and_langs = read_csv("data/github_repos_and_langs.csv") %>%
   rename(repo = repo_name)
+head(repos_and_langs)
 
 commits_with_dates = read_csv('data/commits_sample.csv') %>%
   mutate(date = as_date(as_datetime(seconds))) %>%
