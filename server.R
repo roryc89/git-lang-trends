@@ -9,7 +9,6 @@ library(sna)
 library(GGally)
 library(RColorBrewer)
 
-
 data_science_languages = c(
   "Python", "R", "SQL", "Julia", "Scala", "Matlab", "SAS"
 )
@@ -18,53 +17,29 @@ functional_languages = c(
   "Clojure", "OCaml", "Haskell", "Scala", "Elixir", "Idris", "Elm", "PureScript"
 )
 
-# make_repo_node_graph = function(date_start, date_end){
-#   # weighted adjacency matrix
-#   bip = data.frame(event1 = c(0, 0, 1, 0),
-#                    event2 = c(0, 1, 0, 0),
-#                    event3 = c(1, 0, 0, 0),
-#                    row.names = letters[1:4])
-#
-#   print(bip)
-#   # weighted bipartite network
-#   bip = network(bip,
-#                 matrix.type = "bipartite",
-#                 ignore.eval = FALSE,
-#                 names.eval = "weights")
-#
-#   col = c("actor" = "grey", "event" = "gold")
-#
-#   # detect and color the mode
-#   ggnet2(bip, color = "mode", palette = col, label = TRUE, edge.label = "weights")
-# }
-
-make_repo_node_graph = function(date_start, date_end){
+make_repo_node_graph = function(date_start, date_end, languages){
 
   commit_tallies = commits_with_dates %>%
     filter(date >= date_start & date <= date_end) %>%
-    head(100) %>%
+    filter(lang %in% languages) %>%
+    head(5000) %>%
     group_by(author_name, repo) %>%
     tally %>%
-    spread(repo, n, fill = 0, drop = F) %>%
+    spread(author_name, n, fill = 0, drop = F) %>%
     ungroup
 
-  # weighted adjacency matrix
-  bip = commit_tallies %>%
-    select(-one_of("author_naoime")) %>%
-    column_to_rownames(var = "author_name")
+  tally_input = commit_tallies %>%
+    column_to_rownames(var = "repo")
 
-  print(bip)
-
-  # weighted bipartite network
-  bip = network(bip,
+  bip = network(tally_input,
                 matrix.type = "bipartite",
                 ignore.eval = FALSE,
                 names.eval = "weights")
 
   col = c("actor" = "grey", "event" = "gold")
 
-  # detect and color the mode
-  ggnet2(bip, color = "mode", palette = col, label = F, edge.label = "weights")
+  ggnet2(bip, shape = "mode", color = "mode", palette = col, label = F, edge.label = "weights")
+
 }
 
 
@@ -179,7 +154,7 @@ function(input, output, session) {
     date_start = ymd(input$date_range[[1]])
     date_end = ymd(input$date_range[[2]])
 
-    make_repo_node_graph(date_start, date_end)
+    make_repo_node_graph(date_start, date_end, input$languages)
   })
 
 }

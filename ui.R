@@ -7,13 +7,14 @@ dashboardPage(
   dashboardHeader(title = "Github languages"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Repo Network", tabName = "repo_network", icon = icon("project-diagram")),
       menuItem("Commits by language", tabName = "languages", icon = icon("language")),
+      menuItem("Repo Network", tabName = "repo_network", icon = icon("project-diagram")),
+      menuItem("About", tabName = "about", icon = icon("about")),
 
       dateRangeInput(
         'date_range',
         label = 'Choose a date range',
-        start = Sys.Date() - (30 * 1), end = Sys.Date()
+        start = Sys.Date() - (30 * 13), end = Sys.Date() - (30 * 1)
       ),
 
       checkboxGroupInput(
@@ -42,15 +43,22 @@ dashboardPage(
   ),
   dashboardBody(
     tabItems(
-      tabItem(tabName = "repo_network",
-        h2("Repo nodes"),
-        plotlyOutput("flights_plot", height = 720)
-      ),
       tabItem(tabName = "languages",
         fluidRow(
           box(plotlyOutput("lang_ratio_plot", height = 560)),
           box(plotlyOutput("lang_count_plot", height = 560))
         )
+      ),
+      tabItem(tabName = "repo_network",
+        h2("Repo nodes"),
+        plotlyOutput("flights_plot", height = 720)
+      ),
+      tabItem(tabName = "about",
+        h2("About"),
+        h3("Repo"),
+        a(href="https://roryc89.shinyapps.io/git-lang-trends/", "https://roryc89.shinyapps.io/git-lang-trends/"),
+        h3("Author"),
+        div("Rory Campbell")
       )
     )
   )
